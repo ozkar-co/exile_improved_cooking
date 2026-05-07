@@ -4,7 +4,7 @@ dofile(modpath .. "/common/smoker.lua")
 dofile(modpath .. "/nodes/smoker.lua")
 dofile(modpath .. "/crafts/smoker.lua")
 
-local SOUP_BONUS_FACTOR = 1.3
+local SOUP_BONUS_FACTOR = 1.2
 
 local function with_soup_bonus(itemstack)
     local boosted = ItemStack(itemstack)
