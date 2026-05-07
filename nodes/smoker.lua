@@ -1,4 +1,48 @@
 -- Register the smoker node
+local SMOKER_MIN_TEMP = 70
+local smoker_is_done_stack
+
+local function smoker_set_ui(pos, meta, status)
+    meta:set_string("formspec", smoker_get_formspec(status))
+    local text = smoker_get_status_text(status)
+    if minimal and minimal.infotext_set then
+        minimal.infotext_set(pos, meta, text)
+    else
+        meta:set_string("infotext", text)
+    end
+end
+
+local function smoker_refresh_state(pos, meta)
+    local inv = meta:get_inventory()
+    local temperature = climate.get_point_temp(pos)
+    local has_items = false
+    local has_pending = false
+
+    for slot = 1, 6 do
+        local stack = inv:get_stack("smoker_main", slot)
+        if not stack:is_empty() then
+            has_items = true
+            if not smoker_is_done_stack(stack) then
+                has_pending = true
+            end
+        end
+    end
+
+    local status
+    if not has_items then
+        status = ""
+    elseif has_pending and temperature < SMOKER_MIN_TEMP then
+        status = "too_cold"
+    elseif has_pending then
+        status = "smoking"
+    else
+        status = "finished"
+    end
+
+    meta:set_string("status", status)
+    smoker_set_ui(pos, meta, status)
+    return status
+end
 
 local function smoker_is_full(inv)
     for slot = 1, 6 do
@@ -9,7 +53,7 @@ local function smoker_is_full(inv)
     return true
 end
 
-local function smoker_is_done_stack(stack)
+smoker_is_done_stack = function(stack)
     if stack:is_empty() then
         return true
     end
@@ -34,8 +78,6 @@ minetest.register_node("exile_improved_cooking:smoker", {
         local inv = meta:get_inventory()
         inv:set_size("smoker_main", 6)
 
-        meta:set_string("formspec", smoker_get_formspec(""))
-
         -- Start the timer
         minetest.get_node_timer(pos):start(smoker_time)
 
@@ -43,7 +85,7 @@ minetest.register_node("exile_improved_cooking:smoker", {
         for slot = 1, 6 do
             meta:set_int("variable_" .. slot, 0)
         end
-        meta:set_string("status", "")
+        smoker_refresh_state(pos, meta)
     end,
 
     on_timer = function(pos, elapsed)
@@ -51,23 +93,14 @@ minetest.register_node("exile_improved_cooking:smoker", {
         local inv = meta:get_inventory()
         local temperature = climate.get_point_temp(pos) -- Get the block temperature
         local status = meta:get_string("status")
-        local has_items = false
-        local has_pending = false
 
         -- Iterate through each slot
         for slot = 1, 6 do
             local variable = meta:get_int("variable_" .. slot)
             local stack = inv:get_stack("smoker_main", slot)
 
-            if not stack:is_empty() then
-                has_items = true
-                if not smoker_is_done_stack(stack) then
-                    has_pending = true
-                end
-            end
-
             local max_value = 100
-            if not stack:is_empty() and not smoker_is_done_stack(stack) and variable < max_value and temperature >= 70 then
+            if not stack:is_empty() and not smoker_is_done_stack(stack) and variable < max_value and temperature >= SMOKER_MIN_TEMP then
                 if status == "" then
                     status = "smoking"
                     meta:set_string("status", status)
@@ -95,18 +128,7 @@ minetest.register_node("exile_improved_cooking:smoker", {
             end
         end
 
-        if not has_items then
-            meta:set_string("status", "")
-        elseif has_pending and temperature < 70 then
-            meta:set_string("status", "too_cold")
-        elseif has_pending then
-            meta:set_string("status", "smoking")
-        else
-            meta:set_string("status", "finished")
-        end
-
-        -- Update the formspec with the current inventory
-        meta:set_string("formspec", smoker_get_formspec(meta:get_string("status")))
+        smoker_refresh_state(pos, meta)
 
         -- Continue the timer
         return true
@@ -114,13 +136,14 @@ minetest.register_node("exile_improved_cooking:smoker", {
 
     on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
         local meta = minetest.get_meta(pos)
+        smoker_refresh_state(pos, meta)
         minetest.show_formspec(clicker:get_player_name(), "exile_improved_cooking:smoker", meta:get_string("formspec"))
     end,
 
     can_dig = function(pos, player)
         local meta = minetest.get_meta(pos)
         local inv = meta:get_inventory()
-        local status = meta:get_string("status")
+        local status = smoker_refresh_state(pos, meta)
 
         if smoker_is_full(inv) then
             return false
@@ -136,10 +159,6 @@ minetest.register_node("exile_improved_cooking:smoker", {
     allow_metadata_inventory_put = function(pos, listname, index, stack, player)
         local meta = minetest.get_meta(pos)
         local status = meta:get_string("status")
-
-        if status == "smoking" then
-            return 0
-        end
 
         if listname == "smoker_main" then
             local inv = meta:get_inventory()
@@ -159,10 +178,6 @@ minetest.register_node("exile_improved_cooking:smoker", {
     allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
         local meta = minetest.get_meta(pos)
         local status = meta:get_string("status")
-
-        if status == "smoking" and (from_list == "smoker_main" or to_list == "smoker_main") then
-            return 0
-        end
 
         if to_list == "smoker_main" then
             local inv = meta:get_inventory()
@@ -195,11 +210,6 @@ minetest.register_node("exile_improved_cooking:smoker", {
     end,
 
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
-        local meta = minetest.get_meta(pos)
-        local status = meta:get_string("status")
-        if listname == "smoker_main" and status == "smoking" then
-            return 0
-        end
         if listname == "smoker_main" then
             return math.min(stack:get_count(), 1)
         end
@@ -211,11 +221,29 @@ minetest.register_node("exile_improved_cooking:smoker", {
         if listname == "smoker_main" then
             -- if the item is taken reset the variable for that slot
             local meta = minetest.get_meta(pos)
-            local inv = meta:get_inventory()
             meta:set_int("variable_" .. index, 0)
-            if inv:is_empty("smoker_main") then
-                meta:set_string("status", "")
+            smoker_refresh_state(pos, meta)
+        end
+    end,
+
+    on_metadata_inventory_put = function(pos, listname, index, stack, player)
+        if listname == "smoker_main" then
+            local meta = minetest.get_meta(pos)
+            meta:set_int("variable_" .. index, 0)
+            smoker_refresh_state(pos, meta)
+        end
+    end,
+
+    on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+        if from_list == "smoker_main" or to_list == "smoker_main" then
+            local meta = minetest.get_meta(pos)
+            if from_list == "smoker_main" then
+                meta:set_int("variable_" .. from_index, 0)
             end
+            if to_list == "smoker_main" then
+                meta:set_int("variable_" .. to_index, 0)
+            end
+            smoker_refresh_state(pos, meta)
         end
     end,
 

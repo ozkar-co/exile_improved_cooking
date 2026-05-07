@@ -1,6 +1,6 @@
 smoker_time = 15
 
-local function smoker_status_text(status)
+function smoker_get_status_text(status)
         if status == "smoking" then
                 return "Status: Smoking food"
         end
@@ -15,7 +15,7 @@ end
 
 function smoker_get_formspec(status)
         return "size[8,4.8;]" ..
-                "label[0.2,0.2;" .. minetest.formspec_escape(smoker_status_text(status)) .. "]" ..
+        "label[0.2,0.2;" .. minetest.formspec_escape(smoker_get_status_text(status)) .. "]" ..
                 "list[current_name;smoker_main;2.5,0.6;3,2;]" ..
                 "list[current_player;main;0,2.7;8,4;]" ..
                 "listring[current_name;smoker_main]" ..
