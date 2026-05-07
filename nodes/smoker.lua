@@ -1,5 +1,5 @@
 -- Register the smoker node
-minetest.register_node("tech:smoker", {
+minetest.register_node("exile_improved_cooking:smoker", {
     description = S("Food Smoker"),
     tiles = { "tech_pottery.png" },
     groups = { dig_immediate = 3, pottery = 1, temp_pass = 1 },
@@ -72,7 +72,7 @@ minetest.register_node("tech:smoker", {
     end,
 
     on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
-        minetest.show_formspec(clicker:get_player_name(), "tech:smoker", smoker_formspec)
+        minetest.show_formspec(clicker:get_player_name(), "exile_improved_cooking:smoker", smoker_formspec)
     end,
 
     allow_metadata_inventory_put = function(pos, listname, index, stack, player)
@@ -122,7 +122,7 @@ minetest.register_node("tech:smoker", {
 })
 
 --unfired
-minetest.register_node("tech:smoker_unfired", {
+minetest.register_node("exile_improved_cooking:smoker_unfired", {
     description = S("Clay Smoker (unfired)"),
     tiles = {
         "nodes_nature_clay.png",
@@ -147,6 +147,6 @@ minetest.register_node("tech:smoker_unfired", {
     end,
     on_timer = function(pos, elapsed)
         --finished product, length
-        return ncrafting.fire_pottery(pos, "tech:smoker_unfired", "tech:smoker", base_firing)
+        return ncrafting.fire_pottery(pos, "exile_improved_cooking:smoker_unfired", "exile_improved_cooking:smoker", base_firing)
     end,
 })
