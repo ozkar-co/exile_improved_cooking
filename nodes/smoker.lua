@@ -1,5 +1,7 @@
 -- Register the smoker node
 local SMOKER_MIN_TEMP = 70
+local SMOKER_BASE_FIRING = ncrafting.base_firing
+local SMOKER_FIRING_INTERVAL = ncrafting.firing_int
 local smoker_is_done_stack
 
 local function smoker_set_ui(pos, meta, status)
@@ -283,10 +285,10 @@ minetest.register_node("exile_improved_cooking:smoker_unfired", {
     sounds = nodes_nature.node_sound_stone_defaults(),
     on_construct = function(pos)
         --length(i.e. difficulty of firing), interval for checks (speed)
-        ncrafting.set_firing(pos, base_firing, firing_int)
+        ncrafting.set_firing(pos, SMOKER_BASE_FIRING, SMOKER_FIRING_INTERVAL)
     end,
     on_timer = function(pos, elapsed)
         --finished product, length
-        return ncrafting.fire_pottery(pos, "exile_improved_cooking:smoker_unfired", "exile_improved_cooking:smoker", base_firing)
+        return ncrafting.fire_pottery(pos, "exile_improved_cooking:smoker_unfired", "exile_improved_cooking:smoker", SMOKER_BASE_FIRING)
     end,
 })
