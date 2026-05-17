@@ -31,3 +31,7 @@ minetest.override_item("tech:soup", {
         return exile_eatdrink_playermade(with_soup_bonus(itemstack), user, pointed_thing)
     end,
 })
+
+minetest.override_item("tech:maraka_flour_bitter", {
+    tiles = {"exile_improved_cooking_flour_bitter.png"},
+})
