@@ -1,5 +1,7 @@
+local smoker_station_type = minetest.get_modpath("exile_advanced_ceramics") and "pottery_wheel" or "crafting_spot"
+
 crafting.register_recipe({
-	type = "crafting_spot",
+	type = smoker_station_type,
 	output = "exile_improved_cooking:smoker_unfired 1",
 	items = { "nodes_nature:clay_wet 5" },
 	level = 1,
