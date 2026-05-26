@@ -69,7 +69,7 @@ minetest.register_node("exile_improved_cooking:egg_dough_fermented", {
     drawtype = "nodebox",
     node_box = {
         type = "fixed",
-        fixed = {-0.3, -0.5, -0.3, 0.3, -0.32, 0.3},
+        fixed = {-0.375, -0.5, -0.375, 0.375, -0.26, 0.375},
     },
     groups = {crumbly = 3, dig_immediate = 3, temp_pass = 1},
     sounds = nodes_nature.node_sound_dirt_defaults(),

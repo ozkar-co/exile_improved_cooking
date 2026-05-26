@@ -10,7 +10,7 @@ crafting.register_recipe({
     type = "mortar_and_pestle",
     output = "exile_improved_cooking:egg_dough_unfermented 1",
     items = {
-        "group:egg 4",
+        "animals:pegasun_eggs 2",
         "tech:vegetable_oil 1",
         "exile_improved_cooking:sari_flour 1",
     },
