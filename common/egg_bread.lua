@@ -124,7 +124,7 @@ exile_add_food({
 })
 
 exile_add_harm({
-    ["exile_improved_cooking:egg_bread_unbaked_cooked"] = { { "Food Poisoning", 0.001, 1 } },
+    ["exile_improved_cooking:egg_bread_unbaked_cooked"] = { { "Food Poisoning", 0.05, 1 } },
     ["exile_improved_cooking:egg_bread_unbaked_burned"] = { { "Food Poisoning", 0.002, 1 } },
 })
 
