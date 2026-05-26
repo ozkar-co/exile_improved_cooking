@@ -1,8 +1,55 @@
 -- Register the smoker node
-local SMOKER_MIN_TEMP = 70
+local SMOKER_MIN_TEMP = 50
 local SMOKER_BASE_FIRING = ncrafting.base_firing
 local SMOKER_FIRING_INTERVAL = ncrafting.firing_int
+local SMOKER_BURN_BASE_CHANCE = 0.002
 local smoker_is_done_stack
+
+local function smoker_get_bake_profile(itemname)
+    local cook_temp = 100
+    local bake_length = 10
+
+    if bake_table and bake_table[itemname] then
+        cook_temp = bake_table[itemname][1] or cook_temp
+        bake_length = bake_table[itemname][2] or bake_length
+    end
+
+    return cook_temp, bake_length
+end
+
+local function smoker_get_max_progress(itemname)
+    local _, bake_length = smoker_get_bake_profile(itemname)
+    return math.max(30, bake_length * 8)
+end
+
+local function smoker_get_progress_step(itemname, temperature)
+    if temperature < SMOKER_MIN_TEMP then
+        return 0
+    end
+
+    local cook_temp = smoker_get_bake_profile(itemname)
+    local heat_ratio = temperature / cook_temp
+
+    if heat_ratio < 1 then
+        return math.max(1, math.floor(heat_ratio * 4))
+    end
+
+    return math.max(2, math.floor(math.min(heat_ratio, 2) * 5))
+end
+
+local function smoker_should_burn(itemname, temperature)
+    local burned_item = itemname .. "_burned"
+    if not minetest.registered_items[burned_item] then
+        return false
+    end
+
+    local cook_temp = smoker_get_bake_profile(itemname)
+    local overheat = math.max(0, temperature - cook_temp * 1.35)
+    local chance = SMOKER_BURN_BASE_CHANCE +
+        (overheat / math.max(cook_temp, 1)) * 0.003
+
+    return math.random() < math.min(0.04, chance)
+end
 
 local function smoker_set_ui(pos, meta, status)
     meta:set_string("formspec", smoker_get_formspec(status))
@@ -101,32 +148,37 @@ minetest.register_node("exile_improved_cooking:smoker", {
             local variable = meta:get_int("variable_" .. slot)
             local stack = inv:get_stack("smoker_main", slot)
 
-            local max_value = 100
-            if not stack:is_empty() and not smoker_is_done_stack(stack) and variable < max_value and temperature >= SMOKER_MIN_TEMP then
+            if not stack:is_empty() and not smoker_is_done_stack(stack) and temperature >= SMOKER_MIN_TEMP then
                 if status == "" then
                     status = "smoking"
                     meta:set_string("status", status)
                 end
 
-                -- Increase the variable by a random amount
-                variable = variable + math.random(1, 10)
+                local item = stack:get_name()
+                local max_value = smoker_get_max_progress(item)
 
-                -- If the variable reaches or exceeds max_value
-                if variable >= max_value then
-                    local item = stack:get_name()
+                if smoker_should_burn(item, temperature) then
+                    inv:set_stack("smoker_main", slot, item .. "_burned 1")
+                    variable = max_value
+                    meta:set_int("variable_" .. slot, variable)
+                elseif variable < max_value then
+                    -- Increase progress according to each food's original bake profile.
+                    variable = variable + smoker_get_progress_step(item, temperature)
 
-                    -- Check if a cooked version of the item exists
-                    local cooked_item = item .. "_cooked"
+                    -- If the variable reaches or exceeds max_value
+                    if variable >= max_value then
+                        local cooked_item = item .. "_cooked"
 
-                    if minetest.registered_items[cooked_item] then
-                        -- Replace the item in the slot with its cooked version
-                        inv:set_stack("smoker_main", slot, cooked_item .. " 1")
-                        variable = max_value
+                        if minetest.registered_items[cooked_item] then
+                            -- Replace the item in the slot with its cooked version
+                            inv:set_stack("smoker_main", slot, cooked_item .. " 1")
+                            variable = max_value
+                        end
                     end
-                end
 
-                -- Update the variable in the metadata
-                meta:set_int("variable_" .. slot, variable)
+                    -- Update the variable in the metadata
+                    meta:set_int("variable_" .. slot, variable)
+                end
             end
         end
 
@@ -145,14 +197,13 @@ minetest.register_node("exile_improved_cooking:smoker", {
     can_dig = function(pos, player)
         local meta = minetest.get_meta(pos)
         local inv = meta:get_inventory()
-        local status = smoker_refresh_state(pos, meta)
+        smoker_refresh_state(pos, meta)
 
-        if smoker_is_full(inv) then
-            return false
-        end
-
-        if status == "smoking" then
-            return false
+        for slot = 1, 6 do
+            local stack = inv:get_stack("smoker_main", slot)
+            if not smoker_is_done_stack(stack) then
+                return false
+            end
         end
 
         return true
@@ -205,6 +256,11 @@ minetest.register_node("exile_improved_cooking:smoker", {
         end
 
         if from_list == "smoker_main" then
+            local inv = meta:get_inventory()
+            local from_stack = inv:get_stack(from_list, from_index)
+            if to_list ~= "smoker_main" and not smoker_is_done_stack(from_stack) then
+                return 0
+            end
             return math.min(count, 1)
         end
 
@@ -213,6 +269,9 @@ minetest.register_node("exile_improved_cooking:smoker", {
 
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
         if listname == "smoker_main" then
+            if not smoker_is_done_stack(stack) then
+                return 0
+            end
             return math.min(stack:get_count(), 1)
         end
         return stack:get_count()
