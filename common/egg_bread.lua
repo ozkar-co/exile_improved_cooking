@@ -28,7 +28,7 @@ minetest.register_node("exile_improved_cooking:sari_flour", {
 })
 
 minetest.register_node("exile_improved_cooking:egg_dough_unfermented", {
-    description = S("Egg Dough (Unfermented)"),
+    description = S("Sari Dough (Unfermented)"),
     tiles = {"exile_improved_cooking_egg_dough_unfermented.png"},
     stack_max = minimal.stack_max_medium,
     paramtype = "light",
@@ -62,7 +62,7 @@ minetest.register_node("exile_improved_cooking:egg_dough_unfermented", {
 })
 
 minetest.register_node("exile_improved_cooking:egg_dough_fermented", {
-    description = S("Egg Dough (Fermented)"),
+    description = S("Sari Dough (Fermented)"),
     tiles = {"exile_improved_cooking_egg_dough_fermented.png"},
     stack_max = minimal.stack_max_medium,
     paramtype = "light",
@@ -76,7 +76,7 @@ minetest.register_node("exile_improved_cooking:egg_dough_fermented", {
 })
 
 minetest.register_node("exile_improved_cooking:egg_bread_unbaked", {
-    description = S("Whole Egg Bread (Unbaked)"),
+    description = S("Sari Bread (Unbaked)"),
     tiles = {"exile_improved_cooking_egg_bread_unbaked.png"},
     stack_max = minimal.stack_max_medium,
     paramtype = "light",
@@ -90,7 +90,7 @@ minetest.register_node("exile_improved_cooking:egg_bread_unbaked", {
 })
 
 minetest.register_node("exile_improved_cooking:egg_bread_unbaked_cooked", {
-    description = S("Whole Egg Bread"),
+    description = S("Sari Bread"),
     tiles = {"exile_improved_cooking_egg_bread_cooked.png"},
     stack_max = minimal.stack_max_medium,
     paramtype = "light",
@@ -104,7 +104,7 @@ minetest.register_node("exile_improved_cooking:egg_bread_unbaked_cooked", {
 })
 
 minetest.register_node("exile_improved_cooking:egg_bread_unbaked_burned", {
-    description = S("Whole Egg Bread (Burned)"),
+    description = S("Sari Bread (Burned)"),
     tiles = {"exile_improved_cooking_egg_bread_burned.png"},
     stack_max = minimal.stack_max_medium,
     paramtype = "light",
