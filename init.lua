@@ -1,8 +1,10 @@
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 
 dofile(modpath .. "/common/smoker.lua")
+dofile(modpath .. "/common/egg_bread.lua")
 dofile(modpath .. "/nodes/smoker.lua")
 dofile(modpath .. "/crafts/smoker.lua")
+dofile(modpath .. "/crafts/egg_bread.lua")
 
 local SOUP_BONUS_FACTOR = 1.2
 
