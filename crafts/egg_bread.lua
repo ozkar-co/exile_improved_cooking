@@ -7,7 +7,7 @@ crafting.register_recipe({
 })
 
 crafting.register_recipe({
-    type = "mixing_spot",
+    type = "mortar_and_pestle",
     output = "exile_improved_cooking:egg_dough_unfermented 1",
     items = {
         "group:egg 4",
@@ -19,7 +19,7 @@ crafting.register_recipe({
 })
 
 crafting.register_recipe({
-    type = "crafting_spot",
+    type = "mortar_and_pestle",
     output = "exile_improved_cooking:egg_bread_unbaked 6",
     items = {"exile_improved_cooking:egg_dough_fermented 1"},
     level = 1,
