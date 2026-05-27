@@ -118,9 +118,9 @@ minetest.register_node("exile_improved_cooking:egg_bread_unbaked_burned", {
 })
 
 exile_add_food({
-    ["exile_improved_cooking:sari_flour"] = { 0, 0, 36, -8, 0 },
-    ["exile_improved_cooking:egg_bread_unbaked_cooked"] = { 0, 0, 12, 8, 0 },
-    ["exile_improved_cooking:egg_bread_unbaked_burned"] = { 0, 0, 6, 4, 0 },
+    ["exile_improved_cooking:sari_flour"] = { 0, 0, 72, -8, 0 },
+    ["exile_improved_cooking:egg_bread_unbaked_cooked"] = { 0, 0, 32, 8, 0 },
+    ["exile_improved_cooking:egg_bread_unbaked_burned"] = { 0, 0, 8, 4, 0 },
 })
 
 exile_add_harm({

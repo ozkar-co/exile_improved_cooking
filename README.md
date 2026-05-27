@@ -11,8 +11,8 @@ Features:
 	- Cooking time scales from original bake data when available.
 	- Very low (non-zero) burn chance at high heat.
 - Adds a whole egg bread chain:
-	- `nodes_nature:sari_seed 72` -> `exile_improved_cooking:sari_flour`.
-	- `group:egg 4` + `tech:vegetable_oil 1` + `exile_improved_cooking:sari_flour 1` -> unfermented dough.
+	- Sari -> Sari seed -> Sari Flour
+	- Pegasum Egg + Oil + Sari flour -> Unfermented dough.
 	- Dough ferments in ambient conditions (no rain/water nearby, moderate temperature).
 	- Fermented dough splits into 6 unbaked breads, then bakes/burns via the normal cooking system.
 - Bitter Maraka Flour uses an improved high-visibility texture.
