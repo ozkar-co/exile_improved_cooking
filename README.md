@@ -16,6 +16,11 @@ Features:
 	- Dough ferments in ambient conditions (no rain/water nearby, moderate temperature).
 	- Fermented dough splits into 6 unbaked breads, then bakes/burns via the normal cooking system.
 - Bitter Maraka Flour uses an improved high-visibility texture.
+- Adds the Bug Meat Pastry, a multi-stage, high-risk cooking chain:
+    - Phase 1: 48× small invertebrate carcasses yield 1× bug meat paste using the mortar and pestle.
+    - Phase 2: The paste block must be placed under flowing water to wash out impurities. Takes ~8 minutes (50 steps, 10s per cycle). Each cycle carries a 4% chance to rot the batch, resulting in a dead-end rotten paste.
+    - Phase 3: 4× washed paste + 2× sari flour + 2× vegetable oil yield 6× unbaked bug meat pastries using the mortar and pestle.
+    - Phase 4 (Baking): Cooked at 160°C for 14 ticks. Baking over an open fire carries a 3% chance per hot tick to rot the pastry. Baking in the clay smoker eliminates the rotting risk entirely, leaving only the standard overheat/burn chance.
 
 Design rationale:
 - Cooking can increase effective nutritional value by making nutrient absorption more efficient. That is why soup gets a boost: the extra satiety and energy reward the added effort of preparing food.
