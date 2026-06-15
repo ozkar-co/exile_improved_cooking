@@ -3,12 +3,12 @@ local S = minetest.get_translator("exile_improved_cooking")
 -- Washing: similar cadence to bitter maraka flour, but with spoilage rolls.
 local MEAT_SOAK_LENGTH = 50
 local MEAT_SOAK_INTERVAL = 10
-local MEAT_SOAK_ROT_CHANCE = 0.04
+local MEAT_SOAK_ROT_CHANCE = 0.004
 
 -- Baking: similar to sari bread, with spoilage while on the fire.
 local PASTRY_BAKE_TEMP = 160
 local PASTRY_BAKE_TIME = 14
-local PASTRY_BAKE_ROT_CHANCE = 0.03
+local PASTRY_BAKE_ROT_CHANCE = 0.002
 
 local meat_paste_box = {
     type = "fixed",
