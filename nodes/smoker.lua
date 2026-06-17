@@ -194,21 +194,6 @@ minetest.register_node("exile_improved_cooking:smoker", {
         minetest.show_formspec(clicker:get_player_name(), "exile_improved_cooking:smoker", meta:get_string("formspec"))
     end,
 
-    can_dig = function(pos, player)
-        local meta = minetest.get_meta(pos)
-        local inv = meta:get_inventory()
-        smoker_refresh_state(pos, meta)
-
-        for slot = 1, 6 do
-            local stack = inv:get_stack("smoker_main", slot)
-            if not smoker_is_done_stack(stack) then
-                return false
-            end
-        end
-
-        return true
-    end,
-
     allow_metadata_inventory_put = function(pos, listname, index, stack, player)
         local meta = minetest.get_meta(pos)
         local status = meta:get_string("status")
