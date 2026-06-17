@@ -1,11 +1,8 @@
 local S = minetest.get_translator("exile_improved_cooking")
 
--- Washing: similar cadence to bitter maraka flour, but with spoilage rolls.
-local MEAT_SOAK_LENGTH = 50
-local MEAT_SOAK_INTERVAL = 10
-local MEAT_SOAK_ROT_CHANCE = 0.004
+local PASTE_BAKE_TEMP = 100
+local PASTE_BAKE_TIME = 12
 
--- Baking: similar to sari bread, with spoilage while on the fire.
 local PASTRY_BAKE_TEMP = 160
 local PASTRY_BAKE_TIME = 14
 local PASTRY_BAKE_ROT_CHANCE = 0.002
@@ -24,34 +21,6 @@ local pastry_cooked_box = {
     type = "fixed",
     fixed = { -0.24, -0.5, -0.24, 0.24, -0.28, 0.24 },
 }
-
-local function meat_paste_is_under_water(pos)
-    local above = minetest.get_node({ x = pos.x, y = pos.y + 1, z = pos.z })
-    return minetest.get_item_group(above.name, "water") == 1
-end
-
-local function meat_paste_do_soak(pos)
-    local meta = minetest.get_meta(pos)
-    local soaking = meta:get_int("soaking")
-
-    if not meat_paste_is_under_water(pos) then
-        return true
-    end
-
-    if math.random() < MEAT_SOAK_ROT_CHANCE then
-        minimal.switch_node(pos, { name = "exile_improved_cooking:bug_meat_paste_rotten" })
-        return false
-    end
-
-    if soaking <= 0 then
-        minimal.switch_node(pos, { name = "exile_improved_cooking:bug_meat_paste_washed" })
-        ncrafting.set_treatment(meta, "soak")
-        return false
-    end
-
-    meta:set_int("soaking", soaking - 1)
-    return true
-end
 
 local function pastry_do_bake(pos)
     local selfname = minetest.get_node(pos).name
@@ -108,19 +77,13 @@ minetest.register_node("exile_improved_cooking:bug_meat_paste", {
     paramtype = "light",
     node_box = meat_paste_box,
     stack_max = minimal.stack_max_medium,
-    groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, falling_node = 1 },
+    groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, falling_node = 1, heatable = PASTE_BAKE_TEMP, edible = 1 },
     sounds = nodes_nature.node_sound_dirt_defaults(),
-    on_construct = function(pos)
-        ncrafting.start_soak(pos, MEAT_SOAK_LENGTH, MEAT_SOAK_INTERVAL)
-    end,
-    on_timer = function(pos, elapsed)
-        return meat_paste_do_soak(pos)
-    end,
 })
 
-minetest.register_node("exile_improved_cooking:bug_meat_paste_washed", {
-    description = S("Bug Meat Paste (Washed)"),
-    tiles = { "exile_improved_cooking_bug_meat_paste_washed.png" },
+minetest.register_node("exile_improved_cooking:bug_meat_paste_cooked", {
+    description = S("Bug Meat Paste (Cooked)"),
+    tiles = { "exile_improved_cooking_bug_meat_paste_cooked.png" },
     drawtype = "nodebox",
     paramtype = "light",
     node_box = meat_paste_box,
@@ -129,14 +92,14 @@ minetest.register_node("exile_improved_cooking:bug_meat_paste_washed", {
     sounds = nodes_nature.node_sound_dirt_defaults(),
 })
 
-minetest.register_node("exile_improved_cooking:bug_meat_paste_rotten", {
-    description = S("Bug Meat Paste (Rotten)"),
-    tiles = { "exile_improved_cooking_bug_meat_paste_rotten.png" },
+minetest.register_node("exile_improved_cooking:bug_meat_paste_burned", {
+    description = S("Bug Meat Paste (Burned)"),
+    tiles = { "exile_improved_cooking_bug_meat_paste_burned.png" },
     drawtype = "nodebox",
     paramtype = "light",
     node_box = meat_paste_box,
     stack_max = minimal.stack_max_medium,
-    groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, falling_node = 1, compost = 1, edible = 1 },
+    groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, falling_node = 1, edible = 1 },
     sounds = nodes_nature.node_sound_dirt_defaults(),
 })
 
@@ -194,13 +157,16 @@ minetest.register_node("exile_improved_cooking:bug_meat_pastry_unbaked_rotten", 
 
 --[[
 Hunger rationale (see health/data_food.lua):
-  invert carcass raw/cooked/burned = 3 / 6 / 1
+  invert carcass raw/cooked/burned = 3 / 6 / 1  (48 carcass -> 144 / 288 / 48 total)
   sari flour = 72
-  egg bread cooked/burned = 32 / 8
+  mashed_anperla_cooked = 72  (6 peeled tubers mashed into one block)
 
-One pastry batch: 4 washed paste (48 carcass each) + 2 flour + 2 oil -> 6 pastries.
-Flour share per pastry ~= 24; meat/process reward ~= 28 -> 52 cooked total.
-Rotten items are unsafe at any quantity.
+Paste (48 carcass -> 1 block, ~one third of full meat value preserved):
+  raw 48, cooked 96, burned 12
+
+Pastry batch: 1 cooked paste + 2 flour + 6 mashed_anperla -> 6 pastries.
+  Component total if eaten separately: 96 + 144 + 432 = 672
+  Per pastry before final bake: 112; baked output ~60 with combination efficiency.
 ]]--
 
 local ROTTEN_HARM = {
@@ -209,20 +175,25 @@ local ROTTEN_HARM = {
 }
 
 exile_add_food({
-    ["exile_improved_cooking:bug_meat_paste_washed"] = { 0, 0, 18, -6, 0 },
-    ["exile_improved_cooking:bug_meat_paste_rotten"] = { 0, -1, -2, -10, 0 },
-    ["exile_improved_cooking:bug_meat_pastry_unbaked_cooked"] = { 0, 0, 52, 14, 0 },
-    ["exile_improved_cooking:bug_meat_pastry_unbaked_burned"] = { 0, -1, 13, 2, 0 },
+    ["exile_improved_cooking:bug_meat_paste"] = { 0, 0, 48, -12, 0 },
+    ["exile_improved_cooking:bug_meat_paste_cooked"] = { 0, 0, 96, 8, 0 },
+    ["exile_improved_cooking:bug_meat_paste_burned"] = { 0, -1, 12, -4, 0 },
+    ["exile_improved_cooking:bug_meat_pastry_unbaked_cooked"] = { 0, 0, 60, 18, 0 },
+    ["exile_improved_cooking:bug_meat_pastry_unbaked_burned"] = { 0, -1, 15, 3, 0 },
     ["exile_improved_cooking:bug_meat_pastry_unbaked_rotten"] = { 0, -2, -4, -12, 0 },
 })
 
 exile_add_harm({
-    ["exile_improved_cooking:bug_meat_paste_washed"] = { { "Food Poisoning", 0.02, 1 } },
-    ["exile_improved_cooking:bug_meat_paste_rotten"] = ROTTEN_HARM,
+    ["exile_improved_cooking:bug_meat_paste"] = { { "Food Poisoning", 0.9, 1 } },
+    ["exile_improved_cooking:bug_meat_paste_cooked"] = { { "Food Poisoning", 0.002, 1 } },
+    ["exile_improved_cooking:bug_meat_paste_burned"] = { { "Food Poisoning", 0.001, 1 } },
     ["exile_improved_cooking:bug_meat_pastry_unbaked_cooked"] = { { "Food Poisoning", 0.004, 1 } },
     ["exile_improved_cooking:bug_meat_pastry_unbaked_burned"] = { { "Food Poisoning", 0.002, 1 } },
     ["exile_improved_cooking:bug_meat_pastry_unbaked_rotten"] = ROTTEN_HARM,
 })
 
--- Smoker reads bake_table for timing, but open-fire baking keeps the custom rot logic above.
+exile_add_bake({
+    ["exile_improved_cooking:bug_meat_paste"] = { PASTE_BAKE_TEMP, PASTE_BAKE_TIME },
+})
+
 bake_table["exile_improved_cooking:bug_meat_pastry_unbaked"] = { PASTRY_BAKE_TEMP, PASTRY_BAKE_TIME }

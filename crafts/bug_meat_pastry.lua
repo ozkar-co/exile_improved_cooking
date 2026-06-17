@@ -10,9 +10,9 @@ crafting.register_recipe({
     type = "mortar_and_pestle",
     output = "exile_improved_cooking:bug_meat_pastry_unbaked 6",
     items = {
-        "exile_improved_cooking:bug_meat_paste_washed 4",
+        "exile_improved_cooking:bug_meat_paste_cooked 1",
         "exile_improved_cooking:sari_flour 2",
-        "tech:vegetable_oil 2",
+        "tech:mashed_anperla 6",
     },
     level = 1,
     always_known = true,
