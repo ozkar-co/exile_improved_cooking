@@ -12,7 +12,7 @@ crafting.register_recipe({
     items = {
         "exile_improved_cooking:bug_meat_paste_cooked 1",
         "exile_improved_cooking:sari_flour 2",
-        "tech:mashed_anperla 6",
+        "tech:mashed_anperla 1",
     },
     level = 1,
     always_known = true,

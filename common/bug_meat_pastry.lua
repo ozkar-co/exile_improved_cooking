@@ -161,12 +161,12 @@ Hunger rationale (see health/data_food.lua):
   sari flour = 72
   mashed_anperla_cooked = 72  (6 peeled tubers mashed into one block)
 
-Paste (48 carcass -> 1 block, ~one third of full meat value preserved):
-  raw 48, cooked 96, burned 12
+Paste (48 carcass -> 1 block, ~58% of full cooked meat value preserved):
+  raw 84, cooked 168, burned 21
 
-Pastry batch: 1 cooked paste + 2 flour + 6 mashed_anperla -> 6 pastries.
-  Component total if eaten separately: 96 + 144 + 432 = 672
-  Per pastry before final bake: 112; baked output ~60 with combination efficiency.
+Pastry batch: 1 cooked paste + 2 flour + 1 mashed_anperla -> 6 pastries.
+  Parts if eaten separately: 168 + 144 + 72 = 384 hu
+  Baked output: 6 x 84 = 504 hu (~8% synergy bonus over parts, not a penalty).
 ]]--
 
 local ROTTEN_HARM = {
@@ -175,11 +175,11 @@ local ROTTEN_HARM = {
 }
 
 exile_add_food({
-    ["exile_improved_cooking:bug_meat_paste"] = { 0, 0, 48, -12, 0 },
-    ["exile_improved_cooking:bug_meat_paste_cooked"] = { 0, 0, 96, 8, 0 },
-    ["exile_improved_cooking:bug_meat_paste_burned"] = { 0, -1, 12, -4, 0 },
-    ["exile_improved_cooking:bug_meat_pastry_unbaked_cooked"] = { 0, 0, 60, 18, 0 },
-    ["exile_improved_cooking:bug_meat_pastry_unbaked_burned"] = { 0, -1, 15, 3, 0 },
+    ["exile_improved_cooking:bug_meat_paste"] = { 0, 0, 84, -14, 0 },
+    ["exile_improved_cooking:bug_meat_paste_cooked"] = { 0, 0, 168, 14, 0 },
+    ["exile_improved_cooking:bug_meat_paste_burned"] = { 0, -1, 21, -3, 0 },
+    ["exile_improved_cooking:bug_meat_pastry_unbaked_cooked"] = { 0, 2, 84, 22, 0 },
+    ["exile_improved_cooking:bug_meat_pastry_unbaked_burned"] = { 0, 0, 21, 5, 0 },
     ["exile_improved_cooking:bug_meat_pastry_unbaked_rotten"] = { 0, -2, -4, -12, 0 },
 })
 
