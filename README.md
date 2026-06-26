@@ -38,7 +38,21 @@ Design rationale:
 - Whole egg bread adds a longer but coherent early-food progression: gather, mill, mix, ferment, and bake.
 - Bug meat paste condenses 48 carcasses into one block at roughly 58% of the full cooked meat total (168 hunger); a modest bulk loss, not a harsh penalty.
 - Bug meat pastry is late-game premium food: one batch yields 504 total hunger (6×84), slightly above the sum of its parts (496), rewarding the full pipeline with a meal that beats mashed anperla, egg bread, and maraka cake per serving.
+- With **exile_alchemy** (optional): salted and sweet food variants use alchemical salt and sugar. Bug meat pastry requires salt and gains higher nutrition.
 - Exile is already a challenging survival experience, so these changes improve quality of life without removing difficulty.
 - The Bitter Maraka Flour texture is intentionally more visible to improve readability in low-light areas, underwater environments, and for players with color blindness.
 
 Goal: make cooking a stronger early-game survival option.
+
+## exile_alchemy integration (optional)
+
+When `exile_alchemy` is loaded:
+
+| Food | Recipe addition | Effect vs base (cooked) |
+|------|-----------------|-------------------------|
+| Maraka Cake (Sweet) | maraka flour + sugar | +2 hunger, +18 energy |
+| Mashed Anperla (Salty) | 6 peeled + salt | +23 hunger, −5 thirst (minerals aid absorption) |
+| Sari Bread (Seasoned) | fermented dough + salt + sugar | +13 hunger, +20 energy, −3 thirst |
+| Bug Meat Pastry | **requires salt** (replaces plain recipe) | 98 / 0 / 26 per pastry |
+
+Burned variants reuse the original burned nodes for maraka, mashed anperla, and sari bread.

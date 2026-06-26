@@ -7,6 +7,8 @@ dofile(modpath .. "/nodes/smoker.lua")
 dofile(modpath .. "/crafts/smoker.lua")
 dofile(modpath .. "/crafts/egg_bread.lua")
 dofile(modpath .. "/crafts/bug_meat_pastry.lua")
+dofile(modpath .. "/common/alchemy_foods.lua")
+dofile(modpath .. "/crafts/alchemy_foods.lua")
 
 local SOUP_BONUS_FACTOR = 1.2
 
