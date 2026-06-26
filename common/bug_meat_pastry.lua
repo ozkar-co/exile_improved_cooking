@@ -14,12 +14,18 @@ local meat_paste_box = {
 
 local pastry_box = {
     type = "fixed",
-    fixed = { -0.26, -0.5, -0.26, 0.26, -0.3, 0.26 },
-}
-
-local pastry_cooked_box = {
-    type = "fixed",
-    fixed = { -0.24, -0.5, -0.24, 0.24, -0.28, 0.24 },
+    fixed = { 
+        {-0.375, -0.5, -0.3125, -0.25, -0.375, -0.25}, -- NodeBox1
+        {-0.4375, -0.5, -0.25, -0.1875, -0.3125, -0.125}, -- NodeBox2
+        {-0.4375, -0.5, -0.125, -0.125, -0.25, 0}, -- NodeBox3
+        {-0.3125, -0.5, 0, 0, -0.1875, 0.3125}, -- NodeBox4
+        {0, -0.5, 0.125, 0.125, -0.25, 0.4375}, -- NodeBox5
+        {0.125, -0.5, 0.1875, 0.25, -0.3125, 0.4375}, -- NodeBox6
+        {0.25, -0.5, 0.25, 0.3125, -0.375, 0.375}, -- NodeBox7
+        {-0.25, -0.5, 0.3125, 0, -0.1875, 0.375}, -- NodeBox8
+        {-0.375, -0.5, 0, -0.3125, -0.1875, 0.25}, -- NodeBox9
+        {-0.25, -0.1875, 0.0625, -0.0625, -0.125, 0.25}, -- NodeBox10
+     },
 }
 
 local function pastry_do_bake(pos)
@@ -108,7 +114,7 @@ minetest.register_node("exile_improved_cooking:bug_meat_pastry_unbaked", {
     tiles = { "exile_improved_cooking_bug_meat_pastry_unbaked.png" },
     drawtype = "nodebox",
     paramtype = "light",
-    node_box = pastry_box,
+    node_box = meat_paste_box,
     stack_max = minimal.stack_max_medium,
     groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, heatable = PASTRY_BAKE_TEMP, edible = 1 },
     sounds = nodes_nature.node_sound_dirt_defaults(),
@@ -127,7 +133,7 @@ minetest.register_node("exile_improved_cooking:bug_meat_pastry_unbaked_cooked", 
     tiles = { "exile_improved_cooking_bug_meat_pastry_unbaked_cooked.png" },
     drawtype = "nodebox",
     paramtype = "light",
-    node_box = pastry_cooked_box,
+    node_box = pastry_box,
     stack_max = minimal.stack_max_medium,
     groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, edible = 1 },
     sounds = nodes_nature.node_sound_dirt_defaults(),
@@ -138,7 +144,7 @@ minetest.register_node("exile_improved_cooking:bug_meat_pastry_unbaked_burned", 
     tiles = { "exile_improved_cooking_bug_meat_pastry_unbaked_burned.png" },
     drawtype = "nodebox",
     paramtype = "light",
-    node_box = pastry_cooked_box,
+    node_box = pastry_box,
     stack_max = minimal.stack_max_medium,
     groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, flammable = 1, edible = 1 },
     sounds = nodes_nature.node_sound_dirt_defaults(),
@@ -149,7 +155,7 @@ minetest.register_node("exile_improved_cooking:bug_meat_pastry_unbaked_rotten", 
     tiles = { "exile_improved_cooking_bug_meat_pastry_unbaked_rotten.png" },
     drawtype = "nodebox",
     paramtype = "light",
-    node_box = pastry_cooked_box,
+    node_box = pastry_box,
     stack_max = minimal.stack_max_medium,
     groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, compost = 1, edible = 1 },
     sounds = nodes_nature.node_sound_dirt_defaults(),
