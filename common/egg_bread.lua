@@ -21,7 +21,7 @@ end
 minetest.register_node("exile_improved_cooking:sari_flour", {
     description = S("Sari Flour"),
     tiles = {"exile_improved_cooking_sari_flour.png"},
-    stack_max = minimal.stack_max_bulky,
+    stack_max = EXILE.stack_max_bulky,
     paramtype = "light",
     groups = {crumbly = 3, dig_immediate = 3, falling_node = 1, flammable = 1},
     sounds = nodes_nature.node_sound_dirt_defaults(),
@@ -30,7 +30,7 @@ minetest.register_node("exile_improved_cooking:sari_flour", {
 minetest.register_node("exile_improved_cooking:egg_dough_unfermented", {
     description = S("Sari Dough (Unfermented)"),
     tiles = {"exile_improved_cooking_egg_dough_unfermented.png"},
-    stack_max = minimal.stack_max_medium,
+    stack_max = EXILE.stack_max_medium,
     paramtype = "light",
     drawtype = "nodebox",
     node_box = {
@@ -49,7 +49,7 @@ minetest.register_node("exile_improved_cooking:egg_dough_unfermented", {
         local fermenting = meta:get_int("fermenting")
 
         if fermenting <= 0 then
-            minimal.switch_node(pos, {name = "exile_improved_cooking:egg_dough_fermented"})
+            EXILE.switch_node(pos, {name = "exile_improved_cooking:egg_dough_fermented"})
             return false
         end
 
@@ -64,7 +64,7 @@ minetest.register_node("exile_improved_cooking:egg_dough_unfermented", {
 minetest.register_node("exile_improved_cooking:egg_dough_fermented", {
     description = S("Sari Dough (Fermented)"),
     tiles = {"exile_improved_cooking_egg_dough_fermented.png"},
-    stack_max = minimal.stack_max_medium,
+    stack_max = EXILE.stack_max_medium,
     paramtype = "light",
     drawtype = "nodebox",
     node_box = {
@@ -78,7 +78,7 @@ minetest.register_node("exile_improved_cooking:egg_dough_fermented", {
 minetest.register_node("exile_improved_cooking:egg_bread_unbaked", {
     description = S("Sari Bread (Unbaked)"),
     tiles = {"exile_improved_cooking_egg_bread_unbaked.png"},
-    stack_max = minimal.stack_max_medium,
+    stack_max = EXILE.stack_max_medium,
     paramtype = "light",
     drawtype = "nodebox",
     node_box = {
@@ -92,7 +92,7 @@ minetest.register_node("exile_improved_cooking:egg_bread_unbaked", {
 minetest.register_node("exile_improved_cooking:egg_bread_unbaked_cooked", {
     description = S("Sari Bread"),
     tiles = {"exile_improved_cooking_egg_bread_cooked.png"},
-    stack_max = minimal.stack_max_medium,
+    stack_max = EXILE.stack_max_medium,
     paramtype = "light",
     drawtype = "nodebox",
     node_box = {
@@ -106,7 +106,7 @@ minetest.register_node("exile_improved_cooking:egg_bread_unbaked_cooked", {
 minetest.register_node("exile_improved_cooking:egg_bread_unbaked_burned", {
     description = S("Sari Bread (Burned)"),
     tiles = {"exile_improved_cooking_egg_bread_burned.png"},
-    stack_max = minimal.stack_max_medium,
+    stack_max = EXILE.stack_max_medium,
     paramtype = "light",
     drawtype = "nodebox",
     node_box = {

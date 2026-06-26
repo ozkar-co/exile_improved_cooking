@@ -53,12 +53,8 @@ end
 
 local function smoker_set_ui(pos, meta, status)
     meta:set_string("formspec", smoker_get_formspec(status))
-    local text = smoker_get_status_text(status)
-    if minimal and minimal.infotext_set then
-        minimal.infotext_set(pos, meta, text)
-    else
-        meta:set_string("infotext", text)
-    end
+    meta:set_string("status_string", smoker_get_status_text(status))
+    EXILE.infotext_set_new(pos, meta)
 end
 
 local function smoker_refresh_state(pos, meta)
@@ -305,6 +301,13 @@ minetest.register_node("exile_improved_cooking:smoker", {
             end
         end
     end,
+
+    on_infotext = function(_pos, _nodedef, meta, params)
+        params = EXILE.infotext_update_params(meta, params)
+        params = EXILE.infotext_get_base_params(nil, meta, params)
+        return (params.status_string or "")
+            .. (params.owner and params.owner ~= "" and "\n" .. params.owner or "")
+    end,
 })
 
 --unfired
@@ -319,7 +322,7 @@ minetest.register_node("exile_improved_cooking:smoker_unfired", {
         "nodes_nature_clay.png",
     },
     drawtype = "nodebox",
-    stack_max = minimal.stack_max_bulky,
+    stack_max = EXILE.stack_max_bulky,
     paramtype = "light",
     node_box = {
         type = "fixed",

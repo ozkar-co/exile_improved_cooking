@@ -48,7 +48,7 @@ local function pastry_do_bake(pos)
     if temp == nil then
         return true
     elseif baking == 0 then
-        minimal.switch_node(pos, { name = name_cooked })
+        EXILE.switch_node(pos, { name = name_cooked })
         ncrafting.set_treatment(meta, "cook")
         minetest.check_for_falling(pos)
         meta:set_int("baking", -1)
@@ -82,7 +82,7 @@ minetest.register_node("exile_improved_cooking:bug_meat_paste", {
     drawtype = "nodebox",
     paramtype = "light",
     node_box = meat_paste_box,
-    stack_max = minimal.stack_max_medium,
+    stack_max = EXILE.stack_max_medium,
     groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, falling_node = 1, heatable = PASTE_BAKE_TEMP, edible = 1 },
     sounds = nodes_nature.node_sound_dirt_defaults(),
 })
@@ -93,7 +93,7 @@ minetest.register_node("exile_improved_cooking:bug_meat_paste_cooked", {
     drawtype = "nodebox",
     paramtype = "light",
     node_box = meat_paste_box,
-    stack_max = minimal.stack_max_medium,
+    stack_max = EXILE.stack_max_medium,
     groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, falling_node = 1, edible = 1 },
     sounds = nodes_nature.node_sound_dirt_defaults(),
 })
@@ -104,7 +104,7 @@ minetest.register_node("exile_improved_cooking:bug_meat_paste_burned", {
     drawtype = "nodebox",
     paramtype = "light",
     node_box = meat_paste_box,
-    stack_max = minimal.stack_max_medium,
+    stack_max = EXILE.stack_max_medium,
     groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, falling_node = 1, edible = 1 },
     sounds = nodes_nature.node_sound_dirt_defaults(),
 })
@@ -115,7 +115,7 @@ minetest.register_node("exile_improved_cooking:bug_meat_pastry_unbaked", {
     drawtype = "nodebox",
     paramtype = "light",
     node_box = meat_paste_box,
-    stack_max = minimal.stack_max_medium,
+    stack_max = EXILE.stack_max_medium,
     groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, heatable = PASTRY_BAKE_TEMP, edible = 1 },
     sounds = nodes_nature.node_sound_dirt_defaults(),
     on_construct = function(pos)
@@ -134,7 +134,7 @@ minetest.register_node("exile_improved_cooking:bug_meat_pastry_unbaked_cooked", 
     drawtype = "nodebox",
     paramtype = "light",
     node_box = pastry_box,
-    stack_max = minimal.stack_max_medium,
+    stack_max = EXILE.stack_max_medium,
     groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, edible = 1 },
     sounds = nodes_nature.node_sound_dirt_defaults(),
 })
@@ -145,7 +145,7 @@ minetest.register_node("exile_improved_cooking:bug_meat_pastry_unbaked_burned", 
     drawtype = "nodebox",
     paramtype = "light",
     node_box = pastry_box,
-    stack_max = minimal.stack_max_medium,
+    stack_max = EXILE.stack_max_medium,
     groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, flammable = 1, edible = 1 },
     sounds = nodes_nature.node_sound_dirt_defaults(),
 })
@@ -156,7 +156,7 @@ minetest.register_node("exile_improved_cooking:bug_meat_pastry_unbaked_rotten", 
     drawtype = "nodebox",
     paramtype = "light",
     node_box = pastry_box,
-    stack_max = minimal.stack_max_medium,
+    stack_max = EXILE.stack_max_medium,
     groups = { crumbly = 3, dig_immediate = 3, temp_pass = 1, compost = 1, edible = 1 },
     sounds = nodes_nature.node_sound_dirt_defaults(),
 })

@@ -34,7 +34,7 @@ local function register_maraka_sweet()
 	minetest.register_node(unbaked, {
 		description = S("Unbaked Maraka Cake (Sweet)"),
 		tiles = { "tech_flour.png" },
-		stack_max = minimal.stack_max_medium,
+		stack_max = EXILE.stack_max_medium,
 		paramtype = "light",
 		paramtype2 = "wallmounted",
 		sunlight_propagates = true,
@@ -50,7 +50,7 @@ local function register_maraka_sweet()
 	minetest.register_node(cooked, {
 		description = S("Maraka Cake (Sweet)"),
 		tiles = { "tech_flour_bitter.png" },
-		stack_max = minimal.stack_max_medium * 4,
+		stack_max = EXILE.stack_max_medium * 4,
 		paramtype = "light",
 		sunlight_propagates = true,
 		drawtype = "nodebox",
@@ -80,7 +80,7 @@ local function register_mashed_salty()
 	minetest.register_node(unbaked, {
 		description = S("Mashed Anperla (Salty, uncooked)"),
 		tiles = { "tech_flour.png" },
-		stack_max = minimal.stack_max_medium / 6,
+		stack_max = EXILE.stack_max_medium / 6,
 		paramtype = "light",
 		drawtype = "nodebox",
 		node_box = {
@@ -94,7 +94,7 @@ local function register_mashed_salty()
 	minetest.register_node(cooked, {
 		description = S("Mashed Anperla (Salty)"),
 		tiles = { "tech_flour_bitter.png" },
-		stack_max = minimal.stack_max_medium / 3,
+		stack_max = EXILE.stack_max_medium / 3,
 		paramtype = "light",
 		drawtype = "nodebox",
 		node_box = {
@@ -123,7 +123,7 @@ local function register_sari_seasoned()
 	minetest.register_node(unbaked, {
 		description = S("Sari Bread (Seasoned, Unbaked)"),
 		tiles = { "exile_improved_cooking_egg_bread_unbaked.png" },
-		stack_max = minimal.stack_max_medium,
+		stack_max = EXILE.stack_max_medium,
 		paramtype = "light",
 		drawtype = "nodebox",
 		node_box = {
@@ -137,7 +137,7 @@ local function register_sari_seasoned()
 	minetest.register_node(cooked, {
 		description = S("Sari Bread (Seasoned)"),
 		tiles = { "exile_improved_cooking_egg_bread_cooked.png" },
-		stack_max = minimal.stack_max_medium,
+		stack_max = EXILE.stack_max_medium,
 		paramtype = "light",
 		drawtype = "nodebox",
 		node_box = {
